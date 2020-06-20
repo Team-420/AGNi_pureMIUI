@@ -1,7 +1,7 @@
 #!/bin/sh
 export KERNELDIR=`readlink -f .`
 
-COUT="/mnt/Storage-VM/AGNi_pureMIUI/AGNi_out"
+COUT="/home/sleepy/Documents/Agni-Compiled_OUT"
 
 echo "`rm -rf $COUT/*`" > /dev/null
 if [ -f $COUT/.config ]; then

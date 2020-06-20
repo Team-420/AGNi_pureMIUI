@@ -3,7 +3,7 @@ export ARCH=arm64
 export SUBARCH=arm64
 
 KERNELDIR=`readlink -f .`
-COMPILEDIR="/mnt/Storage-VM/COMPILED_OUT"
+COMPILEDIR="/home/sleepy/Documents/Agni-Compiled_OUT"
 
 ANDROID="Q"
 DEVICE="whyred"
@@ -11,7 +11,7 @@ CONFIG="agni_whyred-Q-oldcam_defconfig"
 SYNC_CONFIG=1
 
 
-FILENAME="AGNi_$ANDROID-OldCam-$DEVICE-$AGNI_VERSION_PREFIX-$AGNI_VERSION.zip"
+FILENAME="Team-420_$ANDROID-OldCam-$DEVICE-$AGNI_VERSION_PREFIX-$AGNI_VERSION.zip"
 
 if [ -f ~/WORKING_DIRECTORY/AGNi_stamp.sh ];
 	then

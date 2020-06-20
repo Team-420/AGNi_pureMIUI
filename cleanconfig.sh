@@ -1,7 +1,7 @@
 #!/bin/sh
 export KERNELDIR=`readlink -f .`
 
-COUT="/mnt/Storage-VM/COMPILED_OUT"
+COUT="/home/sleepy/Documents/Agni-Compiled_OUT"
 
 if [ -f $COUT/.config ];
 	then

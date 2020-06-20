@@ -1,9 +1,11 @@
 #!/bin/sh
-export CROSS_COMPILE=/home/sleepy/android/toolchains/gcc-arm-x86_64-aarch64-none-linux-gnu/bin/aarch64-none-linux-gnu-
-export CROSS_COMPILE_ARM32=/mnt/Storage-VM/Note9-Zeus-Pie9.0-2.3.97/toolchains/7.1/bin/arm-eabi-
 
-COUT="/mnt/Storage-VM/COMPILED_OUT/"
-KERNELDIR=/mnt/Storage-VM/AGNi_pureMIUI/
+export CROSS_COMPILE=/home/sleepy/android/toolchains/gcc-arm-x86_64-aarch64-none-linux-gnu/bin/aarch64-none-linux-gnu-
+export CROSS_COMPILE_ARM32=/home/sleepy/android/toolchains/gcc-arm-9.2-2019.12-x86_64-arm-none-eabi/bin/arm-none-eabi-
+#export CROSS_COMPILE_ARM32=/mnt/Storage-VM/Note9-Zeus-Pie9.0-2.3.97/toolchains/7.1/bin/arm-eabi-
+
+COUT="/home/sleepy/Documents/Agni-Compiled_OUT"
+KERNELDIR=/home/sleepy/Documents/AGNi_pureMIUI/
 
 if [ -f $COUT/.config ];
 then
@@ -29,6 +31,8 @@ echo " 4: Build all tulip    - Redmi Note 6 Pro"
 echo " 5: Build all lavender - Redmi Note 7"
 echo " 6: Build all wayne    - MI 6X"
 echo " 7: Build jasmine      - MI A2"
+echo " 8: Quick Build only whyred (Q-NewCam)"
+echo " 9: Quick Build only Lavender (Q-OLDCam)"
 echo " "
 echo " 0:  X  Exit Compilation  X"
 echo "\n$HORIZONTALLINE"
@@ -194,6 +198,22 @@ elif [ $choice -eq 2 ]; then
 	./scripts/agni/build_kernel_whyred_Q-oldcam.sh || exit 1
 	rm $COUT/.config $COUT/.config.old
 	echo "          BATCH MODE: Built AGNi whyred Q OldCam variant!!!"
+	echo $HORIZONTALLINE
+elif [ $choice -eq 8 ]; then
+	#### --QUICK WHYRED Q NEWCAM
+	echo $HORIZONTALLINE
+	echo "          BATCH MODE: Building AGNi whyred Q NewCam variant..."
+	./scripts/agni/build_kernel_whyred_Q.sh || exit 1
+	rm $COUT/.config $COUT/.config.old
+	echo "          BATCH MODE: Built AGNi whyred Q NewCam variant!!!"
+	echo $HORIZONTALLINE		
+elif [ $choice -eq 9 ]; then
+	#### --QUICK Lavender Q OldCAM
+	echo $HORIZONTALLINE
+	echo "          BATCH MODE: Building AGNi whyred Q OLD Cam variant..."
+	./scripts/agni/build_kernel_lavender_Q-oldcam.sh || exit 1
+	rm $COUT/.config $COUT/.config.old
+	echo "          BATCH MODE: Built Team420 Lavender Q OldCam variant!!!"
 	echo $HORIZONTALLINE		
 elif [ $choice -eq 3 ]; then
 	#### ALL WHYRED
