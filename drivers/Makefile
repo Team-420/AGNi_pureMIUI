@@ -10,6 +10,10 @@ obj-y				+= bus/
 
 obj-$(CONFIG_GENERIC_PHY)	+= phy/
 
+#aircrack drivers 
+
+obj-y        			+= aircrack/rtl8188eus/
+
 # GPIO must come after pinctrl as gpios may need to mux pins etc
 obj-$(CONFIG_PINCTRL)		+= pinctrl/
 obj-y				+= gpio/
