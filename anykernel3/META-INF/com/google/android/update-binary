@@ -128,6 +128,7 @@ if [ -f version ]; then
   ui_print " ";
 fi;
 ui_print " " "AGNi Kernel sdm660 by psndna88 @ xda-developers" " ";
+ui_print " " "Nethunter Kernel aditions sdm660 by S133PY @ Team-420" " ";
 ui_print " " "AnyKernel3 by osm0sis @ xda-developers" " " " ";
 
 $BOOTMODE || $bb mount -o bind /dev/urandom /dev/random;
