@@ -69,6 +69,7 @@ extern bool focal_gesture_mode;
 extern bool enable_gesture_mode;
 extern bool synaptics_gesture_func_on;
 #endif
+bool ESD_TE_status = false;
 
 DEFINE_LED_TRIGGER(bl_led_trigger);
 
@@ -1142,30 +1143,30 @@ static int mdss_dsi_panel_on(struct mdss_panel_data *pdata)
 	if (on_cmds->cmd_cnt)
 		mdss_dsi_panel_cmds_send(ctrl, on_cmds, CMD_REQ_COMMIT);
 
-	if(ce_state == 1){
+	if(ce_state==14){
 	   if (ce_on_cmds->cmd_cnt)
 	       mdss_dsi_panel_cmds_send(ctrl,ce_on_cmds, CMD_REQ_COMMIT);
 	}
-	if(srgb_state == 1){
+	if(srgb_state == 11){
 	   if (srgb_on_cmds->cmd_cnt)
 	       mdss_dsi_panel_cmds_send(ctrl,srgb_on_cmds, CMD_REQ_COMMIT);
 	} else if ((srgb_state == 2) && (!miuirom) && (srgb_enabled == 1)) {
 		if (srgb_off_cmds->cmd_cnt)
 			mdss_dsi_panel_cmds_send(ctrl,srgb_off_cmds, CMD_REQ_COMMIT);
 	}
-	if(cabc_state == 1){
-		if (cabc_on_cmds->cmd_cnt)
-	       mdss_dsi_panel_cmds_send(ctrl,cabc_on_cmds, CMD_REQ_COMMIT);
+	if(cabc_state == 11){
+//		if (cabc_on_cmds->cmd_cnt)
+//	       mdss_dsi_panel_cmds_send(ctrl,cabc_on_cmds, CMD_REQ_COMMIT);
 	}
 	if(cabc_movie_state == 1){
-		if (cabc_movie_on_cmds->cmd_cnt)
-	       mdss_dsi_panel_cmds_send(ctrl,cabc_movie_on_cmds, CMD_REQ_COMMIT);
-		pr_info("set cabc movie on\n");
+//		if (cabc_movie_on_cmds->cmd_cnt)
+//	       mdss_dsi_panel_cmds_send(ctrl,cabc_movie_on_cmds, CMD_REQ_COMMIT);
+//		pr_info("set cabc movie on\n");
 	}
 	if(cabc_still_state == 1){
-		if (cabc_still_on_cmds->cmd_cnt)
-	       mdss_dsi_panel_cmds_send(ctrl,cabc_still_on_cmds, CMD_REQ_COMMIT);
-		pr_info("set cabc still on\n");
+//		if (cabc_still_on_cmds->cmd_cnt)
+//	       mdss_dsi_panel_cmds_send(ctrl,cabc_still_on_cmds, CMD_REQ_COMMIT);
+//		pr_info("set cabc still on\n");
 	}
 	if (pinfo->compression_mode == COMPRESSION_DSC)
 		mdss_dsi_panel_dsc_pps_send(ctrl, pinfo);
@@ -1246,9 +1247,12 @@ static int mdss_dsi_panel_off(struct mdss_panel_data *pdata)
 		if (ctrl->ndx != DSI_CTRL_LEFT)
 			goto end;
 	}
-
-	if (ctrl->off_cmds.cmd_cnt)
-		mdss_dsi_panel_cmds_send(ctrl, &ctrl->off_cmds, CMD_REQ_COMMIT);
+	if(ESD_TE_status){
+		printk("%s: esd check skip lcd suspend \n", __func__);	 
+	}else{
+		if (ctrl->off_cmds.cmd_cnt)
+			mdss_dsi_panel_cmds_send(ctrl, &ctrl->off_cmds, CMD_REQ_COMMIT);
+	}
 
 	if (ctrl->ds_registered && pinfo->is_pluggable) {
 		mdss_dba_utils_video_off(pinfo->dba_data);
@@ -2059,6 +2063,9 @@ static int mdss_dsi_gen_read_status(struct mdss_dsi_ctrl_pdata *ctrl_pdata)
 	if (!mdss_dsi_cmp_panel_reg_v2(ctrl_pdata)) {
 		pr_err("%s: Read back value from panel is incorrect\n",
 							__func__);
+	if ((strstr(g_lcd_id,"nt36672") != NULL)||(strstr(g_lcd_id,"nt36672a") != NULL)||(strstr(g_lcd_id,"td4320") != NULL)) {
+		ESD_TE_status = true;
+	}
 		return -EINVAL;
 	} else {
 		return 1;
@@ -2514,11 +2521,10 @@ static void mdss_dsi_parse_panel_horizintal_line_idle(struct device_node *np,
 static int mdss_dsi_set_refresh_rate_range(struct device_node *pan_node,
 		struct mdss_panel_info *pinfo)
 {
-	int temp, rc = 0;
+	int rc = 0;
 	rc = of_property_read_u32(pan_node,
 			"qcom,mdss-dsi-min-refresh-rate",
-			&temp);
-	pinfo->min_fps = 30;
+			&pinfo->min_fps);
 	if (rc) {
 		pr_warn("%s:%d, Unable to read min refresh rate\n",
 				__func__, __LINE__);

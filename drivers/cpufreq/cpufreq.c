@@ -35,6 +35,7 @@
 #endif
 #include <trace/events/power.h>
 
+extern int cpuoc_state;
 static LIST_HEAD(cpufreq_policy_list);
 
 static inline bool policy_is_inactive(struct cpufreq_policy *policy)
@@ -693,6 +694,21 @@ static int cpufreq_parse_governor(char *str_governor, unsigned int *policy,
 	return err;
 }
 
+/**
+ * cpufreq_per_cpu_attr_read() / show_##file_name() -
+ * print out cpufreq information
+ *
+ * Write out information from cpufreq_driver->policy[cpu]; object must be
+ * "unsigned int".
+ */
+
+#define show_one(file_name, object)			\
+static ssize_t show_##file_name				\
+(struct cpufreq_policy *policy, char *buf)		\
+{							\
+	return sprintf(buf, "%u\n", policy->object);	\
+}
+
 show_one(cpuinfo_min_freq, cpuinfo.min_freq);
 show_one(cpuinfo_max_freq, cpuinfo.max_freq);
 show_one(cpuinfo_transition_latency, cpuinfo.transition_latency);
@@ -710,9 +726,35 @@ static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
 	return ret;
 }
 
-int cpufreq_set_policy(struct cpufreq_policy *policy,
+static int cpufreq_set_policy(struct cpufreq_policy *policy,
 				struct cpufreq_policy *new_policy);
 
+/**
+ * cpufreq_per_cpu_attr_write() / store_##file_name() - sysfs write access
+ */
+#define store_one(file_name, object)			\
+static ssize_t store_##file_name					\
+(struct cpufreq_policy *policy, const char *buf, size_t count)		\
+{									\
+	int ret, temp;							\
+	struct cpufreq_policy new_policy;				\
+									\
+	memcpy(&new_policy, policy, sizeof(*policy));			\
+	new_policy.min = policy->user_policy.min;			\
+	new_policy.max = policy->user_policy.max;			\
+									\
+	ret = sscanf(buf, "%u", &new_policy.object);			\
+	if (ret != 1)							\
+		return -EINVAL;						\
+									\
+	temp = new_policy.object;					\
+	ret = cpufreq_set_policy(policy, &new_policy);		\
+	if (!ret)							\
+		policy->user_policy.object = temp;			\
+									\
+	return ret ? ret : count;					\
+}
+				
 extern bool cpu_minfreq_lock;
 static ssize_t store_scaling_min_freq(struct cpufreq_policy *policy, const char *buf, size_t count) {
 
@@ -2253,7 +2295,7 @@ EXPORT_SYMBOL(cpufreq_get_policy);
  * policy : current policy.
  * new_policy: policy to be set.
  */
-int cpufreq_set_policy(struct cpufreq_policy *policy,
+static int cpufreq_set_policy(struct cpufreq_policy *policy,
 				struct cpufreq_policy *new_policy)
 {
 	struct cpufreq_governor *old_gov;
@@ -2296,6 +2338,20 @@ int cpufreq_set_policy(struct cpufreq_policy *policy,
 
 	policy->min = new_policy->min;
 	policy->max = new_policy->max;
+#if defined(CONFIG_KERNEL_CUSTOM_E7S) || defined(CONFIG_KERNEL_CUSTOM_E7T)
+	if ((!cpu_oc) && (cpuoc_state == 0)) {
+		if (policy->max > 1843200)
+			policy->max = 1843200;
+	} else if (cpuoc_state == 1) {
+		if (policy->max > 2208000)
+			policy->max = 2208000;
+	}
+#else
+	if ((!cpu_oc) && (cpuoc_state == 1)) {
+		if (policy->max > 2208000)
+			policy->max = 2208000;
+	}
+#endif
 //	trace_cpu_frequency_limits(policy->max, policy->min, policy->cpu);
 
 	pr_debug("new min and max freqs are %u - %u kHz\n",
