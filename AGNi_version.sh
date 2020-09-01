@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ## AGNi version info
-KERNELDIR=`readlink -f .`
+KERNELDIR=/mnt/kernels/AGNi_pureMIUI
 
 export AGNI_VERSION_PREFIX="stable"
 export AGNI_VERSION="v9.5.2"

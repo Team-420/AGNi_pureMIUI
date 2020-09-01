@@ -2,7 +2,7 @@
 export ARCH=arm64
 export SUBARCH=arm64
 
-KERNELDIR=`readlink -f .`
+KERNELDIR=/mnt/kernels/AGNi_pureMIUI
 
 DEVICE="lavender"
 CONFIG1="agni_lavender_defconfig"
@@ -16,11 +16,11 @@ WLAN_MODPO="$COMPILEDIR/drivers/staging/qcacld-3.0_pie_old"
 . $KERNELDIR/AGNi_version.sh
 FILENAME="AGNi_kernel_$DEVICE-$AGNI_VERSION_PREFIX-$AGNI_VERSION.zip"
 
-if [ -f ~/WORKING_DIRECTORY/AGNi_stamp.sh ]; then
-	. ~/WORKING_DIRECTORY/AGNi_stamp.sh
+if [ -f /mnt/kernels/AGNi_pureMIUI/AGNi_stamp.sh ]; then
+	. /mnt/kernels/AGNi_pureMIUI/AGNi_stamp.sh
 fi
-if [ -f ~/WORKING_DIRECTORY/gcc-9.x_aarch64.sh ]; then
-	. ~/WORKING_DIRECTORY/gcc-9.x_aarch64.sh
+if [ -f /mnt/kernels/AGNi_pureMIUI/gcc-9.x_aarch64.sh ]; then
+	. /mnt/kernels/AGNi_pureMIUI/gcc-9.x_aarch64.sh
 fi
 
 if [ ! -d $COMPILEDIR ]; then

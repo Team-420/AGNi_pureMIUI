@@ -1,9 +1,14 @@
 #!/bin/sh
-COUT="~/WORKING_DIRECTORY/COMPILED_OUT"
-KERNELDIR=`readlink -f .`
+export CROSS_COMPILE=/home/sleepy/android/toolchains/gcc-arm-x86_64-aarch64-none-linux-gnu/bin/aarch64-none-linux-gnu-
+export CROSS_COMPILE_ARM32=/home/sleepy/android/toolchains/gcc-arm-9.2-2019.12-x86_64-arm-none-eabi/bin/arm-none-eabi-
 
-if [ -f ~/WORKING_DIRECTORY/AGNi_stamp.sh ]; then
-	. ~/WORKING_DIRECTORY/AGNi_stamp.sh
+COUT="/mnt/kernels/AGNi_pureMIUI/COMPILED_OUT"
+KERNELDIR=/mnt/kernels/AGNi_pureMIUI/
+export COUT="/mnt/kernels/AGNi_pureMIUI/COMPILED_OUT"
+export COMPILEDIR="/mnt/kernels/AGNi_pureMIUI/COMPILED_OUT"
+
+if [ -f /mnt/kernels/AGNi_pureMIUI/AGNi_stamp.sh ]; then
+	. /mnt/kernels/AGNi_pureMIUI/AGNi_stamp.sh
 fi
 
 chmod +x $KERNELDIR/AGNi_version.sh

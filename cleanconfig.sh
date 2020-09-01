@@ -1,8 +1,8 @@
 #!/bin/sh
-export KERNELDIR=`readlink -f .`
+export KERNELDIR=/mnt/kernels/AGNi_pureMIUI
 
-if [ -f ~/WORKING_DIRECTORY/AGNi_stamp.sh ]; then
-	. ~/WORKING_DIRECTORY/AGNi_stamp.sh
+if [ -f /mnt/kernels/AGNi_pureMIUI/AGNi_stamp.sh ]; then
+	. /mnt/kernels/AGNi_pureMIUI/AGNi_stamp.sh
 fi
 if [ ! -d $COMPILEDIR ]; then
 	COUT=$KERNELDIR/OUTPUT

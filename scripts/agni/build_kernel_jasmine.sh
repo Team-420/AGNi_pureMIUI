@@ -2,7 +2,7 @@
 export ARCH=arm64
 export SUBARCH=arm64
 
-KERNELDIR=`readlink -f .`
+KERNELDIR=/mnt/kernels/AGNi_pureMIUI
 
 DEVICE="jasmine"
 CONFIG1="agni_jasmine_defconfig"
