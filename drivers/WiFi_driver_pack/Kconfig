@@ -1,0 +1,10 @@
+comment "External WiFi drivers for android by @D_L_NeroN"
+
+source "drivers/WiFi_driver_pack/rtl8188eus/Kconfig"
+
+source "drivers/WiFi_driver_pack/rtl8188fu/Kconfig"
+
+source "drivers/WiFi_driver_pack/rtl8812au/Kconfig"
+
+source "drivers/WiFi_driver_pack/rtl8192eu/Kconfig"
+
